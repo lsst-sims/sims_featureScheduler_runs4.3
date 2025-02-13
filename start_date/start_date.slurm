@@ -26,7 +26,7 @@ conda activate rubin
 export OPENBLAS_NUM_THREADS=1
 
 
-cat start.sh | parallel -j 4 
+cat sd.sh | parallel -j 4 
 
 # rm maf.sh
 #  
