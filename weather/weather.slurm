@@ -13,7 +13,7 @@
 #SBATCH --mem-per-cpu=20g
 #
 #SBATCH --time=1-14:10:00
-#SBATCH --chdir=/sdf/data/rubin/shared/fbs_sims/sims_featureScheduler_runs4.3/baseline
+#SBATCH --chdir=/sdf/data/rubin/shared/fbs_sims/sims_featureScheduler_runs4.3/weather
 #SBATCH --mail-user=yoachim@uw.edu
 #
 ##turn on e-mail notification
