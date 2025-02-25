@@ -1262,7 +1262,8 @@ def ddf_surveys(
 
     obs_array = ScheduledObservationArray(n=loaded_ddfs.size)
     for key in obs_array.dtype.names:
-        obs_array[key] = loaded_ddfs[key].copy()
+        if key != "filter":
+            obs_array[key] = loaded_ddfs[key].copy()
 
     euclid_obs = np.where(
         (obs_array["scheduler_note"] == "DD:EDFS_b")
