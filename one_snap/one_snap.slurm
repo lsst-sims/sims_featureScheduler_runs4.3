@@ -3,7 +3,7 @@
 #SBATCH --account=rubin:developers      # Account name
 #SBATCH --partition=milano
 #
-#SBATCH --job-name=baseline4.3
+#SBATCH --job-name=one_snap4.3
 #SBATCH --output=output-%j.txt
 #SBATCH --error=output-%j.txt
 #
