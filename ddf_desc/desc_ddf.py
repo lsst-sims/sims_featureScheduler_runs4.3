@@ -1617,7 +1617,7 @@ def gen_scheduler(args):
     mjd_start = SURVEY_START_MJD + mjd_plus
 
     fileroot, extra_info = set_run_info(
-        dbroot=dbroot, file_end="v4.3", out_dir=out_dir
+        dbroot=dbroot, file_end="v4.3_", out_dir=out_dir
     )
 
     pattern_dict = {
