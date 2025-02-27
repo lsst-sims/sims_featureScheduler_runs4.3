@@ -14,5 +14,5 @@ ls *yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
 generate_ss
 cat ss_script.sh >> maf.sh
 
-cat maf.sh | parallel -j 5
+cat maf.sh | parallel -j 7
 ```
