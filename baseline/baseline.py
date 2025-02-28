@@ -1588,7 +1588,7 @@ def gen_scheduler(args):
     nside = args.nside
     mjd_plus = args.mjd_plus
     split_long = args.split_long
-    too = ~args.no_too
+    too = not args.no_too
 
     # Parameters that were previously command-line
     # arguments.
