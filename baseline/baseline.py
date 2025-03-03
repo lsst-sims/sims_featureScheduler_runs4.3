@@ -1510,7 +1510,7 @@ def generate_twilight_near_sun(
                 nexp=nexp,
                 detailers=detailer_list,
                 twilight_scale=False,
-                min_area=min_area,
+                area_required=min_area,
             )
         )
     return surveys
