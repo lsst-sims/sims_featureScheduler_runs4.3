@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --account=rubin:developers      # Account name
-#SBATCH --partition=milano
+#SBATCH --partition=roma
 #
 #SBATCH --job-name=p12_test.3
 #SBATCH --output=output-%j.txt
