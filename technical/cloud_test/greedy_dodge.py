@@ -1727,10 +1727,10 @@ def gen_scheduler(args):
             split_long=split_long,
             n_snaps=nexp,
         )
-        surveys = [toos, roman_surveys, ddfs, long_gaps, blobs, twi_blobs, neo, greedy]
+        surveys = [greedy]
 
     else:
-        surveys = [roman_surveys, ddfs, long_gaps, blobs, twi_blobs, neo, greedy]
+        surveys = [greedy]
 
         sim_ToOs = None
         event_table = None

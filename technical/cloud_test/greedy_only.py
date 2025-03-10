@@ -182,19 +182,19 @@ def standard_bf(
     if bandname2 is not None:
         bfs.append(
             (
-                bf.M5DiffBasisFunction(bandname=bandname, nside=nside, apply_cloud_extinction=True),
-                m5_weight / 2.0, 
+                bf.M5DiffBasisFunction(bandname=bandname, nside=nside),
+                m5_weight / 2.0,
             )
         )
         bfs.append(
             (
-                bf.M5DiffBasisFunction(bandname=bandname2, nside=nside, apply_cloud_extinction=True),
+                bf.M5DiffBasisFunction(bandname=bandname2, nside=nside),
                 m5_weight / 2.0,
             )
         )
 
     else:
-        bfs.append((bf.M5DiffBasisFunction(bandname=bandname, nside=nside, apply_cloud_extinction=True), m5_weight))
+        bfs.append((bf.M5DiffBasisFunction(bandname=bandname, nside=nside), m5_weight))
 
     if bandname2 is not None:
         bfs.append(
@@ -1727,10 +1727,10 @@ def gen_scheduler(args):
             split_long=split_long,
             n_snaps=nexp,
         )
-        surveys = [toos, roman_surveys, ddfs, long_gaps, blobs, twi_blobs, neo, greedy]
+        surveys = [greedy]
 
     else:
-        surveys = [roman_surveys, ddfs, long_gaps, blobs, twi_blobs, neo, greedy]
+        surveys = [greedy]
 
         sim_ToOs = None
         event_table = None
