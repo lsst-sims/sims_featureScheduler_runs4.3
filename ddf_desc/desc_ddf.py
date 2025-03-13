@@ -47,6 +47,8 @@ from rubin_scheduler.scheduler.utils import (
 from rubin_scheduler.site_models import Almanac
 from rubin_scheduler.utils import DEFAULT_NSIDE, SURVEY_START_MJD, _hpid2_ra_dec
 
+from desc_ddf_rubin_scheduler import generate_ddf_observations
+
 # So things don't fail on hyak
 iers.conf.auto_download = False
 # XXX--note this line probably shouldn't be in production
@@ -1240,7 +1242,7 @@ def ddf_surveys(
     nside=None,
     expt=29.2,
     nexp=2,
-    save_file="ddf_desc_0.70_sn.npy"
+    survey_file="ddf_desc_0.70_sn.npy"
 ):
     """Generate surveys for DDF observations
 
@@ -1258,12 +1260,7 @@ def ddf_surveys(
         Exposure time for DDF visits. Default 29.2.
     """
     
-    loaded_ddfs = np.load(save_file)
-
-    obs_array = ScheduledObservationArray(n=loaded_ddfs.size)
-    for key in obs_array.dtype.names:
-        if key != "filter":
-            obs_array[key] = loaded_ddfs[key].copy()
+    obs_array = generate_ddf_observations(survey_file=survey_file)
 
     euclid_obs = np.where(
         (obs_array["scheduler_note"] == "DD:EDFS_b")
@@ -1591,7 +1588,7 @@ def gen_scheduler(args):
     nside = args.nside
     mjd_plus = args.mjd_plus
     split_long = args.split_long
-    too = ~args.no_too
+    too = not args.no_too
 
     # Parameters that were previously command-line
     # arguments.
