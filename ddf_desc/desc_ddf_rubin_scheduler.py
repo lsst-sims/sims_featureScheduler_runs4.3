@@ -1,5 +1,5 @@
 import numpy as np
-from rubin_scheduler.scheduler.surveys.ddf_presched_desc import generate_ddf_scheduled_obs
+from ddf_presched_desc import generate_ddf_scheduled_obs
 import pandas as pd
 from optparse import OptionParser
 
@@ -181,32 +181,45 @@ def get_val_field(df, field, colName):
     return df[df['field'] == field][colName].tolist()
 
 
-parser = OptionParser(
-    description='Script to produce DDF observations for the LSST scheduler')
+def generate_ddf_observations(survey_file="ddf_desc_0.70_sn.npy"):
+    ddf_survey = np.load(survey_file, allow_pickle=True)
 
-parser.add_option('--inputDir', type=str,
-                  default='../survey_lsst_scheduler',
-                  help='Location dir of input files [%default]')
-parser.add_option('--survey', type=str,
-                  default='ddf_desc_0.70_sn.npy',
-                  help='config file for visits [%default]')
+    # grab ddf configuration for rubin survey
+    ddf_kwargs = ddf_config(survey=ddf_survey)
+    observations = generate_ddf_scheduled_obs(dist_tol=1,
+                                              ddf_kwargs=ddf_kwargs)
 
-opts, args = parser.parse_args()
-
-inputDir = opts.inputDir
-survey = opts.survey
-
-# load the survey
-
-ddf_survey = np.load(f'{inputDir}/{survey}', allow_pickle=True)
-
-# grab ddf configuration for rubin survey
-ddf_kwargs = ddf_config(survey=ddf_survey)
+    return observations
 
 
-# generate observations
+if __name__ == "__main__":
 
-observations = generate_ddf_scheduled_obs(dist_tol=1,
-                                          ddf_kwargs=ddf_kwargs)
+    parser = OptionParser(
+        description='Script to produce DDF observations for the LSST scheduler')
 
-print('done', len(observations))
+    parser.add_option('--inputDir', type=str,
+                      default='./',
+                      help='Location dir of input files [%default]')
+    parser.add_option('--survey', type=str,
+                      default='ddf_desc_0.70_sn.npy',
+                      help='config file for visits [%default]')
+
+    opts, args = parser.parse_args()
+
+    inputDir = opts.inputDir
+    survey = opts.survey
+
+    # load the survey
+
+    ddf_survey = np.load(f'{inputDir}/{survey}', allow_pickle=True)
+
+    # grab ddf configuration for rubin survey
+    ddf_kwargs = ddf_config(survey=ddf_survey)
+
+
+    # generate observations
+
+    observations = generate_ddf_scheduled_obs(dist_tol=1,
+                                              ddf_kwargs=ddf_kwargs)
+
+    print('done', len(observations))
