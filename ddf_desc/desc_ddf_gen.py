@@ -1589,6 +1589,9 @@ def gen_scheduler(args):
     mjd_plus = args.mjd_plus
     split_long = args.split_long
     too = not args.no_too
+    survey_file = args.survey_file
+
+    file_num = survey_file.split('_')[2]
 
     # Parameters that were previously command-line
     # arguments.
@@ -1614,7 +1617,7 @@ def gen_scheduler(args):
     mjd_start = SURVEY_START_MJD + mjd_plus
 
     fileroot, extra_info = set_run_info(
-        dbroot=dbroot, file_end="v4.3.1_", out_dir=out_dir
+        dbroot=dbroot, file_end=file_num + "_v4.3.1_", out_dir=out_dir
     )
 
     pattern_dict = {
@@ -1702,6 +1705,7 @@ def gen_scheduler(args):
         euclid_detailers=euclid_detailers,
         nside=nside,
         nexp=nexp,
+        survey_file=survey_file,
     )
 
     greedy = gen_greedy_surveys(nside, nexp=nexp, footprints=footprints)
@@ -1827,6 +1831,10 @@ def sched_argparser():
         action="store_true",
         help="Split long ToO exposures into standard visit lengths",
     )
+    parser.add_argument("--survey_file",
+                        type=str,
+                        default="ddf_desc_0.70_sn.npy")
+
     parser.set_defaults(split_long=False)
     parser.add_argument("--no_too", dest="no_too", action="store_true")
     parser.set_defaults(no_too=False)

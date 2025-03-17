@@ -9,7 +9,7 @@
 #
 #SBATCH --nodes=1                       # Number of nodes
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=2
 #SBATCH --mem-per-cpu=20g
 #
 #SBATCH --time=1-14:10:00
@@ -27,7 +27,7 @@ export OPENBLAS_NUM_THREADS=1
 
 # python desc_ddf.py
 
-python desc_ddf_gen.py
+cat ddf.sh | parallel -j 2
 
 # rm maf.sh
 #  
