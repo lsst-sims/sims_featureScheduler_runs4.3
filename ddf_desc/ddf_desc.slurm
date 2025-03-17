@@ -25,8 +25,9 @@ source ~/anaconda3/etc/profile.d/conda.sh
 conda activate rubin
 export OPENBLAS_NUM_THREADS=1
 
-python desc_ddf.py
+# python desc_ddf.py
 
+python desc_ddf_gen.py
 
 # rm maf.sh
 #  
