@@ -42,14 +42,14 @@ export OPENBLAS_NUM_THREADS=1
 # cat maf.sh | parallel -j 5
 
 
-rm maf.sh
- 
-ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" > maf.sh
-ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" >> maf.sh
-ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
-ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
-
-generate_ss
-cat ss_script.sh >> maf.sh
+# rm maf.sh
+#  
+# ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" > maf.sh
+# ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" >> maf.sh
+# ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
+# ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
+# 
+# generate_ss
+# cat ss_script.sh >> maf.sh
  
 cat maf.sh | parallel -j 10
