@@ -8,8 +8,8 @@
 #SBATCH --error=output-%j.txt
 #
 #SBATCH --nodes=1                       # Number of nodes
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=2
+#SBATCH --ntasks=10
+#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=20g
 #
 #SBATCH --time=1-14:10:00
@@ -27,7 +27,7 @@ export OPENBLAS_NUM_THREADS=1
 
 # python desc_ddf.py
 
-cat ddf.sh | parallel -j 2
+# cat ddf.sh | parallel -j 2
 
 # rm maf.sh
 #  
@@ -40,3 +40,16 @@ cat ddf.sh | parallel -j 2
 # cat ss_script.sh >> maf.sh
 #  
 # cat maf.sh | parallel -j 5
+
+
+rm maf.sh
+ 
+ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" > maf.sh
+ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" >> maf.sh
+ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
+ls desc_ddf_gen*10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
+
+generate_ss
+cat ss_script.sh >> maf.sh
+ 
+cat maf.sh | parallel -j 10
