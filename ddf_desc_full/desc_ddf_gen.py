@@ -1592,6 +1592,11 @@ def gen_scheduler(args):
     too = not args.no_too
     survey_file_num = args.survey_file_num
 
+    ddf_files = glob.glob("ddf*.npy")
+    ddf_files.sort()
+    survey_file = ddf_files[survey_file_num]
+
+    tag = survey_file.replace('ddf_desc_', '').replace('.npy', '')
 
     # Parameters that were previously command-line
     # arguments.
@@ -1617,7 +1622,7 @@ def gen_scheduler(args):
     mjd_start = SURVEY_START_MJD + mjd_plus
 
     fileroot, extra_info = set_run_info(
-        dbroot=dbroot, file_end= "%i_v4.3.1_" % survey_file_num, out_dir=out_dir
+        dbroot=dbroot, file_end=tag + "_v4.3.1_", out_dir=out_dir
     )
 
     pattern_dict = {
@@ -1699,10 +1704,6 @@ def gen_scheduler(args):
         u_detailer,
         detailers.Rottep2RotspDesiredDetailer(),
     ]
-
-    ddf_files = glob.glob("ddf*.npy")
-    ddf_files.sort()
-    survey_file = ddf_files[survey_file_num]
 
     ddfs = ddf_surveys(
         detailers=details,
