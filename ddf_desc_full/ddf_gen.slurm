@@ -7,8 +7,8 @@
 #SBATCH --output=output-%j.txt
 #SBATCH --error=output-%j.txt
 #
-#SBATCH --nodes=1                       # Number of nodes
-#SBATCH --ntasks=9
+#SBATCH --nodes=2                       # Number of nodes
+#SBATCH --ntasks=25
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=20g
 #
@@ -27,16 +27,16 @@ export OPENBLAS_NUM_THREADS=1
 
 
 
-cat desc.sh | parallel -j 7
+#cat desc.sh | parallel -j 7
 
-# rm maf.sh
-#  
-# ls *10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" > maf.sh
-# ls *10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" >> maf.sh
-# ls *10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
-# ls *10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
-# 
-# generate_ss
-# cat ss_script.sh >> maf.sh
-#  
-# cat maf.sh | parallel -j 5
+rm maf.sh
+ 
+ls *10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" > maf.sh
+ls *10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" >> maf.sh
+ls *10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
+ls *10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
+
+generate_ss
+cat ss_script.sh >> maf.sh
+ 
+cat maf.sh | parallel -j 25
