@@ -1,0 +1,1 @@
+.npy files from https://me.lsst.eu/gris/survey_lsst_scheduler/
