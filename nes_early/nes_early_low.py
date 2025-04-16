@@ -41,7 +41,6 @@ from rubin_scheduler.scheduler.surveys import (
 from rubin_scheduler.scheduler.targetofo import gen_all_events
 from rubin_scheduler.scheduler.utils import (
     ConstantFootprint,
-    LowNesMap,
     make_rolling_footprints,
 )
 from rubin_scheduler.site_models import Almanac
@@ -52,7 +51,8 @@ from template_bfs import (NInNightMaskBasisFunction,
                           MoonAltLimitBasisFunction,
                           MaskAfterNObsBasisFunction,
                           RevHaMaskBasisFunction,
-                          MaskAllButNES
+                          MaskAllButNES,
+                          LowNesMap
                           )
 
 # So things don't fail on hyak
