@@ -25,7 +25,7 @@ source ~/anaconda3/etc/profile.d/conda.sh
 conda activate rubin
 export OPENBLAS_NUM_THREADS=1
 
-pythong_early.py
+python_early.py
 
 
 # rm maf.sh
