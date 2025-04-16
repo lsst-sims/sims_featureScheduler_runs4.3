@@ -18,3 +18,17 @@ Writing results to  baseline_v4.3.1_0yrs.db
 Looks like no speed issue, but we have changed the evaluation sometimes.
 Let's check if cross platform on the branch is still the same
 
+
+on m2:
+Flushed 98834 observations from queue for being stale
+Completed 2016094 observations
+ran in 431 min = 7.2 hours
+Writing results to  baseline_v4.3.1_10yrs.db
+
+why is that up to 7.2 hours?--probably just fell asleep
+
+
+Flushed 98834 observations from queue for being stale
+Completed 2016094 observations
+ran in 638 min = 10.6 hours
+Writing results to  baseline_v4.3.1_10yrs.db

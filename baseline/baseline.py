@@ -413,7 +413,7 @@ def blob_for_long(
         "smoothing_kernel": None,
         "nside": nside,
         "seed": 42,
-        "dither": True,
+        "dither": "night",
         "twilight_scale": True,
     }
 
@@ -667,7 +667,7 @@ def gen_greedy_surveys(
         "smoothing_kernel": None,
         "seed": 42,
         "camera": "LSST",
-        "dither": True,
+        "dither": "night",
         "survey_name": "greedy",
     }
 
@@ -850,7 +850,7 @@ def generate_blobs(
         "smoothing_kernel": None,
         "nside": nside,
         "seed": 42,
-        "dither": True,
+        "dither": "night",
         "twilight_scale": False,
     }
 
@@ -1096,7 +1096,7 @@ def generate_twi_blobs(
         "smoothing_kernel": None,
         "nside": nside,
         "seed": 42,
-        "dither": True,
+        "dither": "night",
         "twilight_scale": False,
         "in_twilight": True,
     }
@@ -1464,7 +1464,7 @@ def generate_twilight_near_sun(
                 exptime=exptime,
                 survey_name=survey_name,
                 ignore_obs=ignore_obs,
-                dither=True,
+                dither="night",
                 nexp=nexp,
                 detailers=detailer_list,
                 twilight_scale=False,
