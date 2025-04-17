@@ -37,3 +37,9 @@ Writing results to  baseline_v4.3.1_10yrs.db
 ----
 once again after rebase
 
+m2:
+Flushed 98352 observations from queue for being stale
+Completed 2015577 observations
+ran in 347 min = 5.8 hours
+Writing results to  baseline_v4.3.1_10yrs.db
+
