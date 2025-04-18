@@ -12,7 +12,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=20g
 #
-#SBATCH --time=1-14:10:00
+#SBATCH --time=2-14:10:00
 #SBATCH --chdir=/sdf/data/rubin/shared/fbs_sims/sims_featureScheduler_runs4.3/nes_early
 #SBATCH --mail-user=yoachim@uw.edu
 #
@@ -25,7 +25,7 @@ source ~/anaconda3/etc/profile.d/conda.sh
 conda activate rubin
 export OPENBLAS_NUM_THREADS=1
 
-#cat nes_early.sh | parallel -j 2
+cat nes_early.sh | parallel -j 2
 
 
 rm maf.sh
