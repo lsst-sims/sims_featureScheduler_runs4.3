@@ -68,7 +68,7 @@ class MaskAllButNES(BaseBasisFunction):
 
         self.indx = np.where(labels != "nes")
         self.result = np.zeros(hp.nside2npix(self.nside), dtype=float)
-        self.result[self.index] = np.nan
+        self.result[self.indx] = np.nan
 
     def _calc_value(self, conditions, **kwargs):
         result = self.result.copy()
