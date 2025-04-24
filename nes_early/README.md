@@ -9,4 +9,4 @@ get NES templates in g 37 days early. Not much impact on the rest of the sky
 nes_early_low_v4.3.2_10yrs.db:
 Also 37 days faster in g, no major other changes.
 
-Insifnificant impact on the regular science metrics.
+Insignificant impact on the regular science metrics.
