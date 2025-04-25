@@ -611,6 +611,7 @@ def gen_long_gaps_survey(
             [bf.AvoidDirectWind(nside=nside)],
             nside=nside,
             ignore_obs=["blob", "DDF", "twi", "pair"],
+            detailers=[ZeroRotTelDetailer()]
         )
         surveys.append(LongGapSurvey(blob[0], scripted, gap_range=gap_range, avoid_zenith=True))
 
