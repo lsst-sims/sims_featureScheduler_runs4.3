@@ -422,10 +422,10 @@ def generate_ddf_scheduled_obs(
     # XXX-probably promote this to a kwarg.
     master_sequences = {0: {"u": 1, "r": 1, "z": 2},
                         1: {"g": 1, "i": 1, "y": 2},
-                        2: {"u": 5, "r": 20, "z": 30},
+                        2: {"u": 5, "r": 16, "z": 25},
                         3: {"g": 1, "i": 1, "y": 2},
                         4: {"u": 1, "r": 1, "z": 2},
-                        5: {"g": 10, "i": 20, "y": 30}
+                        5: {"g": 7, "i": 17, "y": 27}
                         }
 
     ddf_names = [key for key in ddfs if "_b" not in key]
