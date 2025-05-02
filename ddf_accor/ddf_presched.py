@@ -70,6 +70,8 @@ def ddf_slopes(
         match = np.where(r_season == season)
         season_length[i] = n_season[match].max() - n_season[match].min()
 
+    print(ddf_name, 'season lengths', season_length)
+
     # Determine goal number of sequences in each season.
     season_vals = np.ones(len(season_list), float) * season_seq
     # Adjust other seasons, relative to the max season length.
