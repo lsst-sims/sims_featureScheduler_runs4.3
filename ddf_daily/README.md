@@ -18,3 +18,6 @@ need to go down to 121
 
 so lose 18--subtract 3 from each of the big ones?
 
+
+and that got me to 7.2% in year 1. Good enough for a first pass.
+
