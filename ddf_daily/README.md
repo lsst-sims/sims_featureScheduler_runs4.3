@@ -21,3 +21,8 @@ so lose 18--subtract 3 from each of the big ones?
 
 and that got me to 7.2% in year 1. Good enough for a first pass.
 
+
+
+----
+
+Trying _ff for fast flush (0.5 days), no need to try and make things up the next day.
