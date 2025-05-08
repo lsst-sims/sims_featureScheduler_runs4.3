@@ -10,3 +10,6 @@ nes_early_low_v4.3.2_10yrs.db:
 Also 37 days faster in g, no major other changes.
 
 Insignificant impact on the regular science metrics.
+
+then nes_early_all is for doing templates faster in the NES in griz
+
