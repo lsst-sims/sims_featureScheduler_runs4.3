@@ -4,6 +4,8 @@ Changes since baseline4.2:
 * Small change in DDF scheduling
 * Fix on Euclid DDF detailer
 
+* Update to IntRounded that makes minor decision changes
+* Updates to ToO strategies that should be relatively minor
 
 
 This should be the last baseline on python version 3.11
