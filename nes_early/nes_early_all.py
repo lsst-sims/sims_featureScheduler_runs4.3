@@ -328,7 +328,7 @@ def template_surveys(
 ):
     """Surveys that will be agressive about gathering template images"""
     if n_obs_template is None:
-        n_obs_template = {"u": 0, "g": 3, "r": 0, "i": 0, "z": 0, "y": 0}
+        n_obs_template = {"u": 0, "g": 3, "r": 3, "i": 3, "z": 3, "y": 0}
 
     BlobSurvey_params = {
         "slew_approx": 7.5,
