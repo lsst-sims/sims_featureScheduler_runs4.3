@@ -11,5 +11,8 @@ Also 37 days faster in g, no major other changes.
 
 Insignificant impact on the regular science metrics.
 
-then nes_early_all is for doing templates faster in the NES in griz
+then nes_early_all is for doing templates faster in the NES in griz:
+This one does impact SNe and fOn a bit since it's putting more visits in the NES and not paying them back.
+But that's probably SNe in year 1, when we wouldn't have templates anyway. 
+
 
