@@ -7,6 +7,13 @@ Changes since baseline4.2:
 * Update to IntRounded that makes minor decision changes
 * Updates to ToO strategies that should be relatively minor
 
+going to 4.3.4:
+* updates to moon avoidance. 
+
+
+
+
+
 
 This should be the last baseline on python version 3.11
 
