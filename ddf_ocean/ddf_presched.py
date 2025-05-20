@@ -356,15 +356,19 @@ def optimize_ddf_times(
     raw_obs[out_season] = 0
     raw_obs[low_season] = low_season_rate
 
-    cumulative_desired = ddf_slopes(
-        ddf_name,
-        raw_obs,
-        night_season,
-        season_seq=season_seq,
-        boost_early_factor=boost_early_factor,
-        boost_factor_third=boost_factor_third,
-        boost_factor_fractional=boost_factor_fractional,
-    )
+    # Can fail on a partial season with nothing in bounds
+    if np.sum(raw_obs) > 0:
+        cumulative_desired = ddf_slopes(
+            ddf_name,
+            raw_obs,
+            night_season,
+            season_seq=season_seq,
+            boost_early_factor=boost_early_factor,
+            boost_factor_third=boost_factor_third,
+            boost_factor_fractional=boost_factor_fractional,
+        )
+    else:
+        return [], [], [], []
 
     # Identify which nights (only scheduling 1 sequence per night)
     # would be usable, based on the masks above.
