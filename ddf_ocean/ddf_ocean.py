@@ -79,6 +79,24 @@ class BandSortDetailer(detailers.BaseDetailer):
         return observation_array[indices]
 
 
+class SplitDither(detailers.BaseDetailer):
+    """use different detailers depending on something. Mainly for
+    catching EDFS observations and doing a different dither
+    """
+    def __init__(self, det1, det2, split_str="EDFS"):
+        self.det1 = det1
+        self.det2 = det2
+        self.split_str = split_str
+
+    def __call__(self, observation_array, conditions):
+        string_in = [self.split_str in note for note in observation_array["scheduler_note"]]
+        string_out = np.logical_not(string_in)
+        
+        observation_array[string_out] = self.det1(observation_array[string_out], conditions)
+        observation_array[string_in] = self.det2(observation_array[string_in], conditions)
+        return observation_array
+
+
 def example_scheduler(
     nside: int = DEFAULT_NSIDE,
     mjd_start: float = SURVEY_START_MJD,
@@ -1286,28 +1304,28 @@ def ddf_surveys(
     obs_array = generate_ddf_scheduled_obs(
         expt=expt, nsnaps=nsnaps, ddf_config_file=ddf_config_file
     )
-    euclid_obs = np.where(
-        (obs_array["scheduler_note"] == "DD:EDFS_b")
-        | (obs_array["scheduler_note"] == "DD:EDFS_a")
-    )[0]
-    all_other = np.where(
-        (obs_array["scheduler_note"] != "DD:EDFS_b")
-        & (obs_array["scheduler_note"] != "DD:EDFS_a")
-    )[0]
+    #euclid_obs = np.where(
+    #    (obs_array["scheduler_note"] == "DD:EDFS_b")
+    #    | (obs_array["scheduler_note"] == "DD:EDFS_a")
+    #)[0]
+    #all_other = np.where(
+    #    (obs_array["scheduler_note"] != "DD:EDFS_b")
+    #    & (obs_array["scheduler_note"] != "DD:EDFS_a")
+    #)[0]
 
     survey1 = ScriptedSurvey(
         [bf.AvoidDirectWind(nside=nside)], nside=nside, detailers=detailers
     )
-    survey1.set_script(obs_array[all_other])
+    survey1.set_script(obs_array)
 
     result = [survey1]
 
-    if len(euclid_obs) > 0:
-        survey2 = ScriptedSurvey(
-            [bf.AvoidDirectWind(nside=nside)], nside=nside, detailers=euclid_detailers
-        )
-        survey2.set_script(obs_array[euclid_obs])
-        result = [survey1, survey2]
+    #if len(euclid_obs) > 0:
+    #    survey2 = ScriptedSurvey(
+    #        [bf.AvoidDirectWind(nside=nside)], nside=nside, detailers=euclid_detailers
+    #    )
+    #    survey2.set_script(obs_array[euclid_obs])
+    #    result = [survey1, survey2]
 
     return result
 
@@ -1714,6 +1732,9 @@ def gen_scheduler(args):
     dither_detailer = detailers.DitherDetailer(
         per_night=per_night, max_dither=max_dither
     )
+
+    dither_detailer = SplitDither(dither_detailer, detailers.EuclidDitherDetailer())
+
     details = [
         detailers.CameraRotDetailer(
             min_rot=-camera_ddf_rot_limit, max_rot=camera_ddf_rot_limit
@@ -1723,18 +1744,17 @@ def gen_scheduler(args):
         detailers.Rottep2RotspDesiredDetailer(),
         BandSortDetailer(),
     ]
-    euclid_detailers = [
-        detailers.CameraRotDetailer(
-            min_rot=-camera_ddf_rot_limit, max_rot=camera_ddf_rot_limit
-        ),
-        detailers.EuclidDitherDetailer(),
-        u_detailer,
-        detailers.Rottep2RotspDesiredDetailer(),
-        BandSortDetailer(),
-    ]
+    #euclid_detailers = [
+    #    detailers.CameraRotDetailer(
+    #        min_rot=-camera_ddf_rot_limit, max_rot=camera_ddf_rot_limit
+    #    ),
+    #    detailers.EuclidDitherDetailer(),
+    #    u_detailer,
+    #    detailers.Rottep2RotspDesiredDetailer(),
+    #    BandSortDetailer(),
+    #]
     ddfs = ddf_surveys(
         detailers=details,
-        euclid_detailers=euclid_detailers,
         nside=nside,
         ddf_config_file=ddf_config_file,
     )
