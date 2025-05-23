@@ -573,7 +573,7 @@ def generate_ddf_scheduled_obs(
             sequence_time=sequence_time / 60.0,
             airmass_limit=2.5,
             sky_limit=None,
-            g_depth_limit=23.5,
+            g_depth_limit=row["g_depth_limit"],
             offseason_length=offseason_length,
             low_season_frac=0,
             low_season_rate=0.3,
@@ -588,7 +588,7 @@ def generate_ddf_scheduled_obs(
         for mjd in mjds:
             for bandname in sequence_dict:
                 if "EDFS" in ddf_name:
-                    obs = ScheduledObservationArray(n=int(sequence_dict[bandname] / 2))
+                    obs = ScheduledObservationArray(n=int(np.ceil(sequence_dict[bandname] / 2)))
                     obs["RA"] = np.radians(ddfs[ddf_name][0])
                     obs["dec"] = np.radians(ddfs[ddf_name][1])
                     obs["mjd"] = mjd
@@ -609,7 +609,7 @@ def generate_ddf_scheduled_obs(
                     obs["sun_alt_max"] = sun_alt_max
                     all_scheduled_obs.append(obs)
 
-                    obs = ScheduledObservationArray(n=int(sequence_dict[bandname] / 2))
+                    obs = ScheduledObservationArray(n=int(np.ceil(sequence_dict[bandname] / 2)))
                     obs["RA"] = np.radians(ddfs[ddf_name.replace("_a", "_b")][0])
                     obs["dec"] = np.radians(ddfs[ddf_name.replace("_a", "_b")][1])
                     obs["mjd"] = mjd
