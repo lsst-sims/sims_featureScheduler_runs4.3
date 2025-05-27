@@ -10,6 +10,8 @@ Changes since baseline4.2:
 going to 4.3.4:
 * updates to moon avoidance. 
 
+going to 4.3.5:
+* more ToO strategy changes
 
 
 
