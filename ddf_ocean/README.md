@@ -14,6 +14,8 @@ ocean3.dat:  Increase deep in EDFS_a so they are a full deep on each field.
 
 ocean4.dat:  turning the nightly sequences down a bit so they are even/odd in shallow seasons.
 
+ocean5.dat:  y shallow from 4 to 3, u deep from 15 to 8
+
 
 Put in a detailer to try and reduce filter thrashing. 
 Fixed a bug that was preventing even/odd from working properly. Put in a throttle so 
