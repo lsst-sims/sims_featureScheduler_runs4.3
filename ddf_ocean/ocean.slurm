@@ -12,8 +12,8 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=20g
 #
-#SBATCH --time=1-14:10:00
-#SBATCH --chdir=/sdf/data/rubin/shared/fbs_sims/sims_featureScheduler_runs4.3/baseline
+#SBATCH --time=2-14:10:00
+#SBATCH --chdir=/sdf/data/rubin/shared/fbs_sims/sims_featureScheduler_runs4.3/ddf_ocean
 #SBATCH --mail-user=yoachim@uw.edu
 #
 ##turn on e-mail notification
