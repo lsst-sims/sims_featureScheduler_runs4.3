@@ -25,7 +25,7 @@ source ~/anaconda3/etc/profile.d/conda.sh
 conda activate rubin
 export OPENBLAS_NUM_THREADS=1
 
-cat ocean.sh | parallel -j 5
+cat ddf_ocean.sh | parallel -j 5
 
 
 rm maf.sh
