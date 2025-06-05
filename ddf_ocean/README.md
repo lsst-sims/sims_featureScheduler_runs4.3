@@ -16,6 +16,10 @@ ocean4.dat:  turning the nightly sequences down a bit so they are even/odd in sh
 
 ocean5.dat:  y shallow from 4 to 3, u deep from 15 to 8
 
+ocean6:  fiddles with deep seasons
+
+ocean7:  cut down deep sequences to try and get all the way to 7% limit
+
 
 Put in a detailer to try and reduce filter thrashing. 
 Fixed a bug that was preventing even/odd from working properly. Put in a throttle so 
