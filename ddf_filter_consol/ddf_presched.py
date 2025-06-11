@@ -424,13 +424,11 @@ def consolidate_filter_swaps(sched_obs, ddf_grid):
         unique_names = unique_names[np.where(unique_names != "DD:EDFS_b")]
 
         if np.size(unique_names) > 1:
-            # first pass, don't check if we are moving things to 
-            # bad times
-
-            ddf_names = [name.replace("DD:", "") for name in sched_obs["scheduler_note"][indx]]
+            ddf_names = [name.replace("DD:", "") for name in np.unique(sched_obs["scheduler_note"][indx])]
 
             flush_length = sched_obs[indx]["flush_by_mjd"] - sched_obs[indx]["mjd"]
-            new_order = np.argsort(sched_obs[indx]["band"])
+            # Sort by band then declination.
+            new_order = np.argsort(sched_obs[indx], order=["band", "dec"])
             # Find the best time for all the DDFs in question.
             grid_indx = np.where((ddf_grid["mjd"] <= sched_obs[indx]["mjd"].max()) &
                                  (ddf_grid["mjd"] >= sched_obs[indx]["mjd"].min()))[0]
