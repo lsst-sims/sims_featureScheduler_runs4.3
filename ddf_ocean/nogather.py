@@ -28,23 +28,17 @@ from astropy.utils import iers
 from rubin_scheduler.scheduler import sim_runner
 from rubin_scheduler.scheduler.model_observatory import ModelObservatory
 from rubin_scheduler.scheduler.schedulers import CoreScheduler, SimpleBandSched
-from rubin_scheduler.scheduler.surveys import (
-    BlobSurvey,
-    GreedySurvey,
-    LongGapSurvey,
-    ScriptedSurvey,
-    gen_roman_off_season,
-    gen_roman_on_season,
-    gen_too_surveys,
-)
+from rubin_scheduler.scheduler.surveys import (BlobSurvey, GreedySurvey,
+                                               LongGapSurvey, ScriptedSurvey,
+                                               gen_roman_off_season,
+                                               gen_roman_on_season,
+                                               gen_too_surveys)
 from rubin_scheduler.scheduler.targetofo import gen_all_events
-from rubin_scheduler.scheduler.utils import (
-    ConstantFootprint,
-    CurrentAreaMap,
-    make_rolling_footprints,
-)
+from rubin_scheduler.scheduler.utils import (ConstantFootprint, CurrentAreaMap,
+                                             make_rolling_footprints)
 from rubin_scheduler.site_models import Almanac
-from rubin_scheduler.utils import DEFAULT_NSIDE, SURVEY_START_MJD, _hpid2_ra_dec
+from rubin_scheduler.utils import (DEFAULT_NSIDE, SURVEY_START_MJD,
+                                   _hpid2_ra_dec)
 
 from ddf_presched import generate_ddf_scheduled_obs
 

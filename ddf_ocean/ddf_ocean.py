@@ -83,17 +83,24 @@ class SplitDither(detailers.BaseDetailer):
     """use different detailers depending on something. Mainly for
     catching EDFS observations and doing a different dither
     """
+
     def __init__(self, det1, det2, split_str="EDFS"):
         self.det1 = det1
         self.det2 = det2
         self.split_str = split_str
 
     def __call__(self, observation_array, conditions):
-        string_in = [self.split_str in note for note in observation_array["scheduler_note"]]
+        string_in = [
+            self.split_str in note for note in observation_array["scheduler_note"]
+        ]
         string_out = np.logical_not(string_in)
-        
-        observation_array[string_out] = self.det1(observation_array[string_out], conditions)
-        observation_array[string_in] = self.det2(observation_array[string_in], conditions)
+
+        observation_array[string_out] = self.det1(
+            observation_array[string_out], conditions
+        )
+        observation_array[string_in] = self.det2(
+            observation_array[string_in], conditions
+        )
         return observation_array
 
 
@@ -1284,6 +1291,7 @@ def ddf_surveys(
     expt={"u": 38, "g": 29.2, "r": 29.2, "i": 29.2, "z": 29.2, "y": 29.2},
     nsnaps={"u": 1, "g": 2, "r": 2, "i": 2, "z": 2, "y": 2},
     ddf_config_file="ocean1.dat",
+    mjd_start=SURVEY_START_MJD,
 ):
     """Generate surveys for DDF observations
 
@@ -1302,16 +1310,11 @@ def ddf_surveys(
     """
 
     obs_array = generate_ddf_scheduled_obs(
-        expt=expt, nsnaps=nsnaps, ddf_config_file=ddf_config_file
+        expt=expt,
+        nsnaps=nsnaps,
+        ddf_config_file=ddf_config_file,
+        mjd_start=mjd_start,
     )
-    #euclid_obs = np.where(
-    #    (obs_array["scheduler_note"] == "DD:EDFS_b")
-    #    | (obs_array["scheduler_note"] == "DD:EDFS_a")
-    #)[0]
-    #all_other = np.where(
-    #    (obs_array["scheduler_note"] != "DD:EDFS_b")
-    #    & (obs_array["scheduler_note"] != "DD:EDFS_a")
-    #)[0]
 
     survey1 = ScriptedSurvey(
         [bf.AvoidDirectWind(nside=nside)], nside=nside, detailers=detailers
@@ -1319,13 +1322,6 @@ def ddf_surveys(
     survey1.set_script(obs_array)
 
     result = [survey1]
-
-    #if len(euclid_obs) > 0:
-    #    survey2 = ScriptedSurvey(
-    #        [bf.AvoidDirectWind(nside=nside)], nside=nside, detailers=euclid_detailers
-    #    )
-    #    survey2.set_script(obs_array[euclid_obs])
-    #    result = [survey1, survey2]
 
     return result
 
@@ -1665,7 +1661,7 @@ def gen_scheduler(args):
 
     fileroot, extra_info = set_run_info(
         dbroot=dbroot,
-        file_end=ddf_config_file.replace(".dat", "") + "_v4.3.5_",
+        file_end=ddf_config_file.replace(".dat", "") + "updated_v4.3.5_",
         out_dir=out_dir,
     )
 
@@ -1744,19 +1740,12 @@ def gen_scheduler(args):
         detailers.Rottep2RotspDesiredDetailer(),
         BandSortDetailer(),
     ]
-    #euclid_detailers = [
-    #    detailers.CameraRotDetailer(
-    #        min_rot=-camera_ddf_rot_limit, max_rot=camera_ddf_rot_limit
-    #    ),
-    #    detailers.EuclidDitherDetailer(),
-    #    u_detailer,
-    #    detailers.Rottep2RotspDesiredDetailer(),
-    #    BandSortDetailer(),
-    #]
+
     ddfs = ddf_surveys(
         detailers=details,
         nside=nside,
         ddf_config_file=ddf_config_file,
+        mjd_start=mjd_start,
     )
 
     greedy = gen_greedy_surveys(nside, nexp=nexp, footprints=footprints)
@@ -1893,7 +1882,7 @@ def sched_argparser():
     parser.add_argument("--no_too", dest="no_too", action="store_true")
     parser.set_defaults(no_too=False)
 
-    parser.add_argument("--ddf_config_file", type=str, default="ocean1.dat")
+    parser.add_argument("--ddf_config_file", type=str, default="ocean6.dat")
 
     return parser
 

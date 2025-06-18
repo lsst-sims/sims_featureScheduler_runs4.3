@@ -37,3 +37,6 @@ We are now quite a bit slower generating the DDF list, so we probably want to sp
 
 Make a nested dither detailer, so all the DDFs can be on a single script for gathering filters.
 
+----
+
+Made an some updates that might result in minor changes (masking in ddf placement, etc), so added "updated" to output filename

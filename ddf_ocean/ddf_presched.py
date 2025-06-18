@@ -400,7 +400,9 @@ def optimize_ddf_times(
     mjds = []
     for night_check in nights_to_use:
         in_night = np.where(
-            (night == night_check) & (np.isfinite(ddf_grid["%s_m5_g" % ddf_name]))
+            (night == night_check)
+            & (np.isfinite(ddf_grid["%s_m5_g" % ddf_name]))
+            & (big_mask > 0)
         )[0]
         m5s = ddf_grid["%s_m5_g" % ddf_name][in_night]
         # we could intorpolate this to get even better than 15 min
@@ -430,7 +432,7 @@ def generate_ddf_scheduled_obs(
     low_season_rate=0.3,
     ddf_config_file="ocean1.dat",
     overhead=2.0,
-    illum_limit=40.,
+    illum_limit=40.0,
 ):
     """
 
@@ -537,7 +539,7 @@ def generate_ddf_scheduled_obs(
 
         u_only = False
         y_only = False
-        sum_filters = row["u"] + row["g"] + row["r"] + row["i"] + row["z"] + row["y"] 
+        sum_filters = row["u"] + row["g"] + row["r"] + row["i"] + row["z"] + row["y"]
         if sum_filters == row["u"]:
             u_only = True
         elif sum_filters == row["y"]:
@@ -588,7 +590,9 @@ def generate_ddf_scheduled_obs(
         for mjd in mjds:
             for bandname in sequence_dict:
                 if "EDFS" in ddf_name:
-                    obs = ScheduledObservationArray(n=int(np.ceil(sequence_dict[bandname] / 2)))
+                    obs = ScheduledObservationArray(
+                        n=int(np.ceil(sequence_dict[bandname] / 2))
+                    )
                     obs["RA"] = np.radians(ddfs[ddf_name][0])
                     obs["dec"] = np.radians(ddfs[ddf_name][1])
                     obs["mjd"] = mjd
@@ -611,7 +615,9 @@ def generate_ddf_scheduled_obs(
                     obs["sun_alt_max"] = sun_alt_max
                     all_scheduled_obs.append(obs)
 
-                    obs = ScheduledObservationArray(n=int(np.ceil(sequence_dict[bandname] / 2)))
+                    obs = ScheduledObservationArray(
+                        n=int(np.ceil(sequence_dict[bandname] / 2))
+                    )
                     obs["RA"] = np.radians(ddfs[ddf_name.replace("_a", "_b")][0])
                     obs["dec"] = np.radians(ddfs[ddf_name.replace("_a", "_b")][1])
                     obs["mjd"] = mjd
