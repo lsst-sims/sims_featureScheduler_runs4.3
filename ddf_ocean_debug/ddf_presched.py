@@ -270,13 +270,6 @@ def optimize_ddf_times(
     # Set the sun mask.
     sun_mask = np.ones(ngrid, dtype=int)
     sun_mask[np.where(ddf_grid["sun_alt"] >= sun_limit)] = 0
-    # expand sun mask backwards by the sequence time.
-    n_back = np.ceil(sequence_time / (ddf_grid["mjd"][1] - ddf_grid["mjd"][0])).astype(
-        int
-    )
-    shadow_indx = np.where(sun_mask == 0)[0] - n_back
-    shadow_indx = shadow_indx[np.where(shadow_indx >= 0)]
-    sun_mask[shadow_indx] = 0
 
     # Set the airmass mask.
     airmass_mask = np.ones(ngrid, dtype=int)
@@ -316,6 +309,9 @@ def optimize_ddf_times(
 
     # Combine the masks.
     big_mask = sun_mask * airmass_mask * sky_mask * m5_mask * eo_mask * moon_illum_mask
+
+    # Do we need to grow the mask to make sure we don't run into a masked 
+    # time while executing the sequence? XXX
 
     # Identify which nights are useful to preschedule DDF visits.
     potential_nights = np.unique(night[np.where(big_mask > 0)])
@@ -397,19 +393,19 @@ def optimize_ddf_times(
     # For each night, find the best time in the night and preschedule the DDF.
     # XXX--probably need to expand this part to resolve the times when
     # multiple things get scheduled
+
     mjds = []
     for night_check in nights_to_use:
         in_night = np.where(
             (night == night_check)
             & (np.isfinite(ddf_grid["%s_m5_g" % ddf_name]))
-            & (big_mask == 1)
+            & (big_mask > 0)
         )[0]
         m5s = ddf_grid["%s_m5_g" % ddf_name][in_night]
         # we could intorpolate this to get even better than 15 min
         # resolution on when to observe
         max_indx = np.where(m5s == m5s.max())[0].min()
         mjds.append(ddf_grid["mjd"][in_night[max_indx]])
-
     return mjds, night_mjd, cumulative_desired, cumulative_sched
 
 
@@ -579,7 +575,7 @@ def generate_ddf_scheduled_obs(
             offseason_length=offseason_length,
             low_season_frac=0,
             low_season_rate=0.3,
-            mjd_start=SURVEY_START_MJD,
+            mjd_start=mjd_start,
             season_seq=n_sequences,
             only_season=row["season"],
             mask_even_odd=mask_even_odd,
