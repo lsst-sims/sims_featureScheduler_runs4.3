@@ -188,6 +188,7 @@ def optimize_ddf_times(
     mask_even_odd=None,
     moon_illum_lt=None,
     moon_illum_gt=None,
+    early_late_season_only=False,
 ):
     """
 
@@ -252,6 +253,8 @@ def optimize_ddf_times(
     mask_even_odd : `bool`
         If True, mask even nights, if False, mask odd. Default
         None masks nothing.
+    early_late_season_only : `bool`
+        Only schedule things in the early and late season.
     """
     # Convert to fraction for convienence
     season_unobs_frac = offseason_length / 365.25
@@ -310,8 +313,15 @@ def optimize_ddf_times(
     # Combine the masks.
     big_mask = sun_mask * airmass_mask * sky_mask * m5_mask * eo_mask * moon_illum_mask
 
-    # Do we need to grow the mask to make sure we don't run into a masked 
-    # time while executing the sequence? XXX
+    # Do we need to grow the mask to make sure we don't run into a masked
+    # time while executing the sequence? 
+    mask_timestep = ddf_grid["mjd"][1] - ddf_grid["mjd"][0]
+    n_mask_steps = int(np.ceil(sequence_time / mask_timestep))
+    init_indx = np.where(big_mask == 0)[0]
+    for offset in range(1, n_mask_steps + 1):
+        indx = init_indx - offset
+        indx = indx[indx >= 0]
+        big_mask[indx] = 0
 
     # Identify which nights are useful to preschedule DDF visits.
     potential_nights = np.unique(night[np.where(big_mask > 0)])
@@ -348,9 +358,13 @@ def optimize_ddf_times(
     )
 
     # Turn these into the 'rate scale' per night that goes to `ddf_slopes`
-    raw_obs = np.ones(unights.size)
-    raw_obs[out_season] = 0
-    raw_obs[low_season] = low_season_rate
+    if early_late_season_only:
+        raw_obs = np.zeros(unights.size)
+        raw_obs[low_season] = low_season_rate
+    else:
+        raw_obs = np.ones(unights.size)
+        raw_obs[out_season] = 0
+        raw_obs[low_season] = low_season_rate
 
     # Can fail on a partial season with nothing in bounds
     if np.sum(raw_obs) > 0:
@@ -494,7 +508,7 @@ def generate_ddf_scheduled_obs(
         Default 40 (percent).
     """
     if data_file is None:
-        data_file = os.path.join(get_data_dir(), "scheduler", "ddf_grid.npz")
+        data_file = os.path.join(get_data_dir(), "scheduler", "ddf_grid_fine.npz")
 
     mjd_tol = mjd_tol / 60 / 24.0  # minutes to days
     alt_min = np.radians(alt_min)
@@ -563,25 +577,54 @@ def generate_ddf_scheduled_obs(
         if y_only:
             moon_illum_gt = illum_limit
 
-        mjds = optimize_ddf_times(
-            ddf_name,
-            ddfs[ddf_name][0],
-            ddf_grid,
-            sun_limit=-18,
-            sequence_time=sequence_time / 60.0,
-            airmass_limit=2.5,
-            sky_limit=None,
-            g_depth_limit=row["g_depth_limit"],
-            offseason_length=offseason_length,
-            low_season_frac=0,
-            low_season_rate=0.3,
-            mjd_start=mjd_start,
-            season_seq=n_sequences,
-            only_season=row["season"],
-            mask_even_odd=mask_even_odd,
-            moon_illum_lt=moon_illum_lt,
-            moon_illum_gt=moon_illum_gt,
-        )[0]
+        # Only doing early and late season observations
+        if "early" in row["even_odd_None"].strip():
+            if "p_0" in row["even_odd_None"].strip():
+                mask_even_odd = True
+            elif "p_2" in row["even_odd_None"].strip():
+                mask_even_odd = False
+            mjds = optimize_ddf_times(
+                ddf_name,
+                ddfs[ddf_name][0],
+                ddf_grid,
+                sun_limit=-18,
+                sequence_time=sequence_time / 60.0,
+                airmass_limit=2.5,
+                sky_limit=None,
+                g_depth_limit=row["g_depth_limit"],
+                offseason_length=offseason_length,
+                # XXX--magic number should move to config file
+                low_season_frac=80./200.,
+                low_season_rate=1.,
+                mjd_start=mjd_start,
+                season_seq=n_sequences,
+                only_season=row["season"],
+                mask_even_odd=mask_even_odd,
+                moon_illum_lt=moon_illum_lt,
+                moon_illum_gt=moon_illum_gt,
+                early_late_season_only=True,
+            )[0]
+        else:
+            mjds = optimize_ddf_times(
+                ddf_name,
+                ddfs[ddf_name][0],
+                ddf_grid,
+                sun_limit=-18,
+                sequence_time=sequence_time / 60.0,
+                airmass_limit=2.5,
+                sky_limit=None,
+                g_depth_limit=row["g_depth_limit"],
+                offseason_length=offseason_length,
+                low_season_frac=0,
+                low_season_rate=0.3,
+                mjd_start=mjd_start,
+                season_seq=n_sequences,
+                only_season=row["season"],
+                mask_even_odd=mask_even_odd,
+                moon_illum_lt=moon_illum_lt,
+                moon_illum_gt=moon_illum_gt,
+                early_late_season_only=False,
+            )[0]
 
         for mjd in mjds:
             for bandname in sequence_dict:

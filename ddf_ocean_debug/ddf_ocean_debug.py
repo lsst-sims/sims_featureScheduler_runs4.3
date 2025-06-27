@@ -1304,14 +1304,6 @@ def ddf_surveys(
     obs_array = generate_ddf_scheduled_obs(
         expt=expt, nsnaps=nsnaps, ddf_config_file=ddf_config_file
     )
-    #euclid_obs = np.where(
-    #    (obs_array["scheduler_note"] == "DD:EDFS_b")
-    #    | (obs_array["scheduler_note"] == "DD:EDFS_a")
-    #)[0]
-    #all_other = np.where(
-    #    (obs_array["scheduler_note"] != "DD:EDFS_b")
-    #    & (obs_array["scheduler_note"] != "DD:EDFS_a")
-    #)[0]
 
     survey1 = ScriptedSurvey(
         [bf.AvoidDirectWind(nside=nside)], nside=nside, detailers=detailers
@@ -1319,13 +1311,6 @@ def ddf_surveys(
     survey1.set_script(obs_array)
 
     result = [survey1]
-
-    #if len(euclid_obs) > 0:
-    #    survey2 = ScriptedSurvey(
-    #        [bf.AvoidDirectWind(nside=nside)], nside=nside, detailers=euclid_detailers
-    #    )
-    #    survey2.set_script(obs_array[euclid_obs])
-    #    result = [survey1, survey2]
 
     return result
 
@@ -1744,15 +1729,7 @@ def gen_scheduler(args):
         detailers.Rottep2RotspDesiredDetailer(),
         BandSortDetailer(),
     ]
-    #euclid_detailers = [
-    #    detailers.CameraRotDetailer(
-    #        min_rot=-camera_ddf_rot_limit, max_rot=camera_ddf_rot_limit
-    #    ),
-    #    detailers.EuclidDitherDetailer(),
-    #    u_detailer,
-    #    detailers.Rottep2RotspDesiredDetailer(),
-    #    BandSortDetailer(),
-    #]
+    
     ddfs = ddf_surveys(
         detailers=details,
         nside=nside,
@@ -1893,7 +1870,7 @@ def sched_argparser():
     parser.add_argument("--no_too", dest="no_too", action="store_true")
     parser.set_defaults(no_too=False)
 
-    parser.add_argument("--ddf_config_file", type=str, default="ocean1.dat")
+    parser.add_argument("--ddf_config_file", type=str, default="ocean8.dat")
 
     return parser
 
